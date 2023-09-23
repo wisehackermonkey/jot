@@ -34,18 +34,19 @@ gcc.exe -o build/jot.exe src/main.c -mwindows
 ### -  *[License](#License)*
 
 
-<!-- 
---------------
-# Screenshots
-- <img src="NNNNNN" width="400"> 
- 
 
 -------------- 
 # Development
 ### 
 ```bash
+gcc.exe -o build/jot.exe src/main.c -mwindows; 
 ```
+<!-- 
 
+--------------
+# Screenshots
+- <img src="NNNNNN" width="400"> 
+ 
 ---
 # Links
 ###
