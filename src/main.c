@@ -49,6 +49,7 @@ LRESULT CALLBACK WindowProcedure(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
             hwndTextbox = CreateWindowW(L"Edit", L"", WS_CHILD | WS_VISIBLE | WS_BORDER | WS_VSCROLL | ES_MULTILINE | ES_AUTOVSCROLL, 
                                         0, 0, 500, 600, hwnd, (HMENU)ID_TEXTBOX, NULL, NULL);
             hBrush = CreateSolidBrush(RGB(0x44, 0x46, 0x54));
+            SetFocus(hwndTextbox); // Set focus to the text box
             break;
         
         case WM_COMMAND:
