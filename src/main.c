@@ -3,75 +3,118 @@
 // Global variables
 HWND g_hWnd;
 HWND g_hEdit;
+COLORREF g_crBackground = RGB(68, 70, 84); 
+
+LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+
+  switch(msg) {
+
+    case WM_CTLCOLOREDIT:
+    {
+      HDC hdcEdit = (HDC) wParam;
+      SetTextColor(hdcEdit, RGB(255, 255, 255));
+      SetBkColor(hdcEdit, g_crBackground); 
+      return (INT_PTR)CreateSolidBrush(g_crBackground);
+    }
+
+  }
+
+  return DefWindowProc(hWnd, msg, wParam, lParam);
+}
 
 // Function to create the main window
 BOOL CreateMainWindow(HINSTANCE hInstance, int nCmdShow) {
-    // Create the main window
-    g_hWnd = CreateWindow(
-        TEXT("EDIT"),      // Edit control class
-        TEXT(""),          // No initial text
-        WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX,
-        CW_USEDEFAULT,     // X position
-        CW_USEDEFAULT,     // Y position
-        500,               // Width
-        600,               // Height
-        NULL,              // Parent window
-        NULL,              // Menu
-        hInstance,         // Instance handle
-        NULL               // No additional parameters
-    );
 
-    if (!g_hWnd) {
-        return FALSE;
-    }
+  // Register window class
+  WNDCLASSEX wc;
+  wc.cbSize = sizeof(WNDCLASSEX);
+  wc.style = CS_HREDRAW | CS_VREDRAW; 
+  wc.lpfnWndProc = WndProc;
+  wc.cbClsExtra = 0;
+  wc.cbWndExtra = 0;
+  wc.hInstance = hInstance;
+  wc.hIcon = NULL;
+  wc.hCursor = LoadCursor(NULL, IDC_ARROW);
+  wc.hbrBackground = (HBRUSH)(COLOR_WINDOW+1); 
+  wc.lpszMenuName = NULL;
+  wc.lpszClassName = TEXT("MyWindowClass");
+  wc.hIconSm = NULL;
+  RegisterClassEx(&wc);
 
-    // Set the background color to #444654
-    SetClassLongPtr(g_hWnd, GCLP_HBRBACKGROUND, (LONG_PTR)CreateSolidBrush(RGB(68, 70, 84)));
+  // Create main window
+  g_hWnd = CreateWindow(
+      TEXT("MyWindowClass"),
+      TEXT("My Window"),
+      WS_OVERLAPPEDWINDOW,
+      CW_USEDEFAULT, CW_USEDEFAULT,
+      500, 600,
+      NULL, NULL, hInstance, NULL);
 
-    // Set the font to monospaced system font
-    HFONT hFont = CreateFont(
-        14,                      // Height of font
-        0,                       // Width of font
-        0,                       // Angle of escapement
-        0,                       // Orientation angle
-        FW_NORMAL,               // Font weight
-        FALSE,                   // Italic
-        FALSE,                   // Underline
-        FALSE,                   // Strikeout
-        ANSI_CHARSET,            // Character set identifier
-        OUT_DEFAULT_PRECIS,      // Output precision
-        CLIP_DEFAULT_PRECIS,     // Clipping precision
-        DEFAULT_QUALITY,         // Output quality
-        FF_DONTCARE | FIXED_PITCH, // Family and pitch
-        TEXT("Consolas")         // Font name (monospaced system font)
-    );
+  if (!g_hWnd) {
+    return FALSE;
+  }
 
-    SendMessage(g_hWnd, WM_SETFONT, (WPARAM)hFont, TRUE);
+  // Set main window background color
+  SetClassLongPtr(g_hWnd, GCLP_HBRBACKGROUND, 
+    (LONG_PTR)CreateSolidBrush(RGB(255, 250, 0)));
 
-    // Create the edit control
-    g_hEdit = g_hWnd;
+  // Create font
+  HFONT hFont = CreateFont(14, 0, 0, 0, FW_NORMAL, FALSE, FALSE, FALSE, 
+    ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, 
+    DEFAULT_QUALITY, FF_DONTCARE|FIXED_PITCH, TEXT("Consolas"));
 
-    ShowWindow(g_hWnd, nCmdShow);
-    UpdateWindow(g_hWnd);
+  // Set main window font
+  SendMessage(g_hWnd, WM_SETFONT, (WPARAM)hFont, TRUE);
 
-    return TRUE;
+  // Register edit control class
+  WNDCLASSEX wcEdit;
+  wcEdit.cbSize = sizeof(WNDCLASSEX);
+  wcEdit.style = CS_HREDRAW | CS_VREDRAW;
+  wcEdit.lpfnWndProc = DefWindowProc;
+  wcEdit.cbClsExtra = 0;
+  wcEdit.cbWndExtra = 0;
+  wcEdit.hInstance = hInstance;
+  wcEdit.hIcon = NULL;
+  wcEdit.hCursor = LoadCursor(NULL, IDC_IBEAM);
+  wcEdit.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
+  wcEdit.lpszMenuName = NULL;
+  wcEdit.lpszClassName = TEXT("EditControl");
+  wcEdit.hIconSm = NULL;
+  RegisterClassEx(&wcEdit);
+
+
+// Create edit control
+g_hEdit = CreateWindowEx(
+    WS_EX_CLIENTEDGE,
+    TEXT("EDIT"), 
+    NULL,
+    WS_CHILD | WS_VISIBLE | ES_AUTOHSCROLL | ES_AUTOVSCROLL,
+    0, 0, 500, 500,
+    g_hWnd,
+    (HMENU)1, 
+    hInstance, 
+    NULL);
+
+  ShowWindow(g_hWnd, nCmdShow);
+  UpdateWindow(g_hWnd);
+
+  return TRUE;
 }
 
-// Main entry point
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
-    UNREFERENCED_PARAMETER(hPrevInstance);
-    UNREFERENCED_PARAMETER(lpCmdLine);
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, 
+  LPSTR lpCmdLine, int nCmdShow) {
+  
+  UNREFERENCED_PARAMETER(hPrevInstance);
+  UNREFERENCED_PARAMETER(lpCmdLine);
 
-    if (!CreateMainWindow(hInstance, nCmdShow)) {
-        return 1;
-    }
+  if(!CreateMainWindow(hInstance, nCmdShow))
+    return 1;
 
-    // Main message loop
-    MSG msg;
-    while (GetMessage(&msg, NULL, 0, 0)) {
-        TranslateMessage(&msg);
-        DispatchMessage(&msg);
-    }
+  MSG msg;
+  while(GetMessage(&msg, NULL, 0, 0)) {
+    TranslateMessage(&msg);
+    DispatchMessage(&msg);
+  }
 
-    return (int)msg.wParam;
+  return (int)msg.wParam;
 }
