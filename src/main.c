@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include <windows.h>
 
 // Global variables
@@ -25,6 +24,29 @@ BOOL CreateMainWindow(HINSTANCE hInstance, int nCmdShow) {
     if (!g_hWnd) {
         return FALSE;
     }
+
+    // Set the background color to #444654
+    SetClassLongPtr(g_hWnd, GCLP_HBRBACKGROUND, (LONG_PTR)CreateSolidBrush(RGB(68, 70, 84)));
+
+    // Set the font to monospaced system font
+    HFONT hFont = CreateFont(
+        14,                      // Height of font
+        0,                       // Width of font
+        0,                       // Angle of escapement
+        0,                       // Orientation angle
+        FW_NORMAL,               // Font weight
+        FALSE,                   // Italic
+        FALSE,                   // Underline
+        FALSE,                   // Strikeout
+        ANSI_CHARSET,            // Character set identifier
+        OUT_DEFAULT_PRECIS,      // Output precision
+        CLIP_DEFAULT_PRECIS,     // Clipping precision
+        DEFAULT_QUALITY,         // Output quality
+        FF_DONTCARE | FIXED_PITCH, // Family and pitch
+        TEXT("Consolas")         // Font name (monospaced system font)
+    );
+
+    SendMessage(g_hWnd, WM_SETFONT, (WPARAM)hFont, TRUE);
 
     // Create the edit control
     g_hEdit = g_hWnd;

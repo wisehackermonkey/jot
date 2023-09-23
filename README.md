@@ -14,11 +14,16 @@
 
 
 # Installation
-### 
+### download mingw from https://sourceforge.net/projects/mingw/
+#### a good install tutorial https://www.geeksforgeeks.org/installing-mingw-tools-for-c-c-and-changing-environment-variable/
+select gcc-g++
+![Alt text](image.png)
 ```bash
 cd ~
 git clone https://github.com/wisehackermonkey/jot.git
 cd jot
+mkdir build
+gcc.exe -o build/jot.exe src/main.c -mwindows
 ```
 
 # Summary
