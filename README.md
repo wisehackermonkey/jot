@@ -5,12 +5,18 @@
 
 <img src="image-1.png" width="400">
  
-<h2 align="center">____________________</h2>
+<h2 align="center">a stripped down no frills note pad.</h2>
 
-<h4 align="center">________________________</h4>
+<h4 align="center">designed to be a no distractions version of notepad.exe, </h4>
 
 ---
 
+---
+# Features
+### Designed to do close to nothing
+- save with ctrl + s
+- quit with ctrl + w
+- select all  ctrl + a
 
 # Installation
 ### download mingw from https://sourceforge.net/projects/mingw/
@@ -39,6 +45,9 @@ gcc.exe -o build/jot.exe src/main.c -mwindows
 ### 
 ```bash
 gcc.exe -o build/jot.exe src/main.c -mwindows; 
+
+build and run
+gcc.exe -o build/jot.exe src/main.c -mwindows; .\build\jot.exe 
 ```
 <!-- 
 

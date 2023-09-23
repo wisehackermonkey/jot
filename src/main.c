@@ -20,7 +20,13 @@ int WINAPI WinMain(HINSTANCE hInst, HINSTANCE hPrevInst, LPSTR args, int ncmdsho
     if(!RegisterClassW(&wc))
         return -1;
 
-    HWND hwnd = CreateWindowW(L"Jot", L"Jot", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 100, 100, 500, 600, NULL, NULL, NULL, NULL);
+    // HWND hwnd = CreateWindowW(L"Jot", L"Jot", WS_OVERLAPPEDWINDOW | WS_VISIBLE, 100, 100, 500, 600, NULL, NULL, NULL, NULL);
+    // HWND hwnd = CreateWindowW(L"Jot", L"", 
+    //                       WS_OVERLAPPEDWINDOW & ~(WS_CAPTION | WS_SYSMENU | WS_MAXIMIZEBOX | WS_MINIMIZEBOX) | WS_VISIBLE, 
+    //                       100, 100, 500, 600, NULL, NULL, NULL, NULL);
+    HWND hwnd = CreateWindowW(L"Jot", L"Jot", 
+                          WS_POPUP | WS_VISIBLE, 
+                          100, 100, 500, 600, NULL, NULL, NULL, NULL);
 
     ACCEL accel[] = {
         {FCONTROL | FVIRTKEY, 'A', ID_ACCEL_SELECTALL},
